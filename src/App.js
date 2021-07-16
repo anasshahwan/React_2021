@@ -22,6 +22,15 @@ function App() {
     }
 ])
 
+const addTask = (task) => {
+  console.log(task, tasks.length + 1)
+  const id =  tasks.length + 1
+  const newTask = { id , ...task}
+console.log(newTask)
+console.log(tasks)
+setTasks([...tasks, newTask])
+
+}
 const deleteTask = (id) => {
   console.log("Deleted ", id)
   setTasks(tasks.filter((task)=> task.id !== id))
@@ -30,8 +39,8 @@ const deleteTask = (id) => {
   return (
     <div className="App">
     <Header title="React 2021 Todo App"/>
-    <AddTask />
-    <Tasks tasks = {tasks} onDelete= {deleteTask}/>
+    <AddTask onAddTask={addTask}/>
+   {tasks.length > 0 ?    <Tasks tasks = {tasks} onDelete= {deleteTask}/> : " No More Notes."} 
     </div>
     
   );
