@@ -2,6 +2,7 @@ import './App.css';
 import Header from './Components/Header'
 import Tasks from './Components/Tasks'
 import { useState } from 'react'
+import AddTask from './Components/AddTask';
 function App() {
   const [tasks, setTasks] = useState([
     {
@@ -21,21 +22,25 @@ function App() {
     }
 ])
 
+const addTask = (task) => {
+  console.log(task, tasks.length + 1)
+  const id =  tasks.length + 1
+  const newTask = { id , ...task}
+console.log(newTask)
+console.log(tasks)
+setTasks([...tasks, newTask])
+
+}
+const deleteTask = (id) => {
+  console.log("Deleted ", id)
+  setTasks(tasks.filter((task)=> task.id !== id))
+}
 
   return (
     <div className="App">
     <Header title="React 2021 Todo App"/>
-    <form className="row justify-content-center" >
-  <div className="col-sm-3">
-     <input type="text"  placeholder= "Write Your Note.." className="form-control-plaintext" id="staticEmail2"   />
-  </div>
- 
-  <div className="col-sm-1">
-    <button type="submit" className="btn btn-primary mb-3">Save</button>
-  </div>
-
-</form>
-<Tasks tasks = {tasks}/>
+    <AddTask onAddTask={addTask}/>
+   {tasks.length > 0 ?    <Tasks tasks = {tasks} onDelete= {deleteTask}/> : " No More Notes."} 
     </div>
     
   );
