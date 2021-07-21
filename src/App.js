@@ -8,15 +8,23 @@ function App() {
 
 const [tasks, setTasks] = useState([])
 
-useEffect(()=>{
-    const fetchTasks = async()=> {
-      const result = await fetch('http://localhost:5100/tasks')
-      const data = await result.json()
-      console.log(data)
-    }
+useEffect(() => {
+      
+   const getTasks = async () => {
+     const tasks = await fetchTasks()
+     setTasks(tasks)
+   }
 
-    fetchTasks()
+    getTasks()
 }, [])
+
+const fetchTasks = async()=> {
+  const result = await fetch('http://localhost:5100/tasks')
+  const data = await result.json()
+  console.log(data)
+  return data
+}
+
 const addTask = (task) => {
   
   const id =  tasks.length + 1
