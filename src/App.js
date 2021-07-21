@@ -1,34 +1,27 @@
 import './App.css';
 import Header from './Components/Header'
 import Tasks from './Components/Tasks'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import AddTask from './Components/AddTask';
 function App() {
-  const [tasks, setTasks] = useState([
-    {
-        id: 1,
-        text: "Test 1 ",
-        isCompleted : true,
-    },
-    {
-        id: 2,
-        text: "Test 2 ",
-        isCompleted : true,
-    },
-    {
-        id: 3,
-        text: "Test 3 ",
-        isCompleted : true,
-    }
-])
+  
 
+const [tasks, setTasks] = useState([])
+
+useEffect(()=>{
+    const fetchTasks = async()=> {
+      const result = await fetch('http://localhost:5100/tasks')
+      const data = await result.json()
+      console.log(data)
+    }
+
+    fetchTasks()
+}, [])
 const addTask = (task) => {
-  console.log(task, tasks.length + 1)
+  
   const id =  tasks.length + 1
   const newTask = { id , ...task}
-console.log(newTask)
-console.log(tasks)
-setTasks([...tasks, newTask])
+  setTasks([...tasks, newTask])
 
 }
 const deleteTask = (id) => {
