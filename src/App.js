@@ -1,38 +1,49 @@
 import './App.css';
 import Header from './Components/Header'
 import Tasks from './Components/Tasks'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import AddTask from './Components/AddTask';
 function App() {
-  const [tasks, setTasks] = useState([
-    {
-        id: 1,
-        text: "Test 1 ",
-        isCompleted : true,
-    },
-    {
-        id: 2,
-        text: "Test 2 ",
-        isCompleted : true,
-    },
-    {
-        id: 3,
-        text: "Test 3 ",
-        isCompleted : true,
-    }
-])
+  
 
-const addTask = (task) => {
-  console.log(task, tasks.length + 1)
-  const id =  tasks.length + 1
-  const newTask = { id , ...task}
-console.log(newTask)
-console.log(tasks)
-setTasks([...tasks, newTask])
+const [tasks, setTasks] = useState([])
+
+useEffect(() => {
+      
+   const getTasks = async () => {
+     const tasks = await fetchTasks()
+     setTasks(tasks)
+   }
+
+    getTasks()
+}, [])
+
+const fetchTasks = async()=> {
+  const result = await fetch('http://localhost:5100/tasks')
+  const data = await result.json()
+  console.log(data)
+  return data
+}
+
+const addTask = async (task) => {
+  const res = await fetch("http://localhost:5100/tasks/", 
+  { method : "POST",
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body:JSON.stringify(task)
+
+})
+
+ // const id =  tasks.length + 1
+  const newTask = await res.json()
+  setTasks([...tasks, newTask])
 
 }
-const deleteTask = (id) => {
-  console.log("Deleted ", id)
+const deleteTask = async (id) => {
+
+  await fetch(`http://localhost:5100/tasks/${id}`, { method : "Delete"})
+
   setTasks(tasks.filter((task)=> task.id !== id))
 }
 
