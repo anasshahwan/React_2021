@@ -25,15 +25,25 @@ const fetchTasks = async()=> {
   return data
 }
 
-const addTask = (task) => {
-  
-  const id =  tasks.length + 1
-  const newTask = { id , ...task}
+const addTask = async (task) => {
+  const res = await fetch("http://localhost:5100/tasks/", 
+  { method : "POST",
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body:JSON.stringify(task)
+
+})
+
+ // const id =  tasks.length + 1
+  const newTask = await res.json()
   setTasks([...tasks, newTask])
 
 }
-const deleteTask = (id) => {
-  console.log("Deleted ", id)
+const deleteTask = async (id) => {
+
+  await fetch(`http://localhost:5100/tasks/${id}`, { method : "Delete"})
+
   setTasks(tasks.filter((task)=> task.id !== id))
 }
 
